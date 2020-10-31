@@ -39,7 +39,6 @@ public class RadnikService {
                 .map(StringUtils::capitalize)
                 .ifPresent(ime -> radnikDAO.updateRadnika(radnikId, ime));
 
-
     }
 
 
