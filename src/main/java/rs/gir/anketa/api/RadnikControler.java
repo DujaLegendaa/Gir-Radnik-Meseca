@@ -1,13 +1,14 @@
 package rs.gir.anketa.api;
 
     import org.springframework.beans.factory.annotation.Autowired;
-    import org.springframework.web.bind.annotation.PostMapping;
-    import org.springframework.web.bind.annotation.RequestBody;
-    import org.springframework.web.bind.annotation.RequestMapping;
-    import org.springframework.web.bind.annotation.RestController;
+    import org.springframework.web.bind.annotation.*;
     import rs.gir.anketa.model.Radnik;
     import rs.gir.anketa.services.RadnikService;
-    @RequestMapping("api/v1/radnik")
+
+    import java.util.List;
+    import java.util.UUID;
+
+@RequestMapping("api/v1/radnik")
     @RestController
     public class RadnikControler {
     private final RadnikService radnikservice;
@@ -21,4 +22,19 @@ package rs.gir.anketa.api;
     radnikservice.addRadnik(radnik);
 }
 
+    @GetMapping
+    public List<Radnik> getAllRadnici() {
+        return radnikservice.getAllRadnici();
+    }
+
+    @PutMapping(path = "{radnikId}")
+    public void updateStudent(@PathVariable("radnikId") UUID radnikId,
+                              @RequestBody Radnik radnik) {
+        radnikservice.updateRadnik(radnikId, radnik);
+    }
+
+    @DeleteMapping("{radnikId}")
+    public void deleteRadnik(@PathVariable("radnikId") UUID radnikId) {
+        radnikservice.deleteRadnici(radnikId);
+    }
 }
