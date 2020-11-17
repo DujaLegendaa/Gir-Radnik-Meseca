@@ -28,6 +28,10 @@ public class RadnikService {
         return radnikDAO.selectSviRadnici();
     }
 
+    public Radnik getradnik(UUID id) {
+        return radnikDAO.getRadnik(id);
+    }
+
    public  void deleteRadnici(UUID id) {
         radnikDAO.deleteRadnikaById(id);
     }
@@ -37,7 +41,7 @@ public class RadnikService {
         Optional.ofNullable(radnik.getIme())
                 .filter(ime -> !StringUtils.isEmpty(ime))
                 .map(StringUtils::capitalize)
-                .ifPresent(ime -> radnikDAO.updateRadnika(radnikId, ime));
+                .ifPresent(ime -> radnikDAO.updateRadnika(radnikId, ime,radnik.getSlika()));
 
     }
 

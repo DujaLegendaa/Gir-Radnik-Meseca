@@ -10,6 +10,7 @@ package rs.gir.anketa.api;
 
 @RequestMapping("api/v1/radnik")
     @RestController
+    @CrossOrigin(origins = "http://localhost:3000")
     public class RadnikControler {
     private final RadnikService radnikservice;
     @Autowired
@@ -27,8 +28,13 @@ package rs.gir.anketa.api;
         return radnikservice.getAllRadnici();
     }
 
+    @GetMapping(path = "{radnikId}")
+    public Radnik  getRadnik(@PathVariable("radnikId") UUID id ) {
+        return radnikservice.getradnik(id);
+    }
+
     @PutMapping(path = "{radnikId}")
-    public void updateStudent(@PathVariable("radnikId") UUID radnikId,
+    public void updateRadnik(@PathVariable("radnikId") UUID radnikId,
                               @RequestBody Radnik radnik) {
         radnikservice.updateRadnik(radnikId, radnik);
     }

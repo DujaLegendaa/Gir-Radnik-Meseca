@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import rs.gir.anketa.model.Radnik;
 
+import java.sql.ResultSet;
 import java.util.List;
 import java.util.UUID;
 @Repository
@@ -21,21 +22,23 @@ public class RadnikPristupPodacima implements RadnikDao{
         String sql = "" +
                 "INSERT INTO radnik (" +
                 " id, " +
-                " ime) " +
-                "VALUES (?, ?)";
+                " ime, " +
+                " slika) " +
+                "VALUES (?, ?,?)";
         return jdbcTemplate.update(
                 sql,
                 id,
-                radnik.getIme());
+                radnik.getIme(),
+                radnik.getSlika());
     }
 
     @Override
-    public int updateRadnika(UUID id, String ime) {
+    public int updateRadnika(UUID id, String ime, String slika) {
         String sql = "" +
                 "UPDATE radnik " +
-                "SET ime = ? " +
+                "SET ime = ? , slika = ? " +
                 "WHERE id = ?";
-        return jdbcTemplate.update(sql, ime, id);
+        return jdbcTemplate.update(sql, ime, slika,  id);
     }
 
     @Override
@@ -51,7 +54,8 @@ public class RadnikPristupPodacima implements RadnikDao{
         String sql = "" +
                 "SELECT " +
                 " id, " +
-                " ime " +
+                " ime, " +
+                " slika " +
                 "FROM radnik";
 
         return jdbcTemplate.query(sql, mapSRadnikFomDb());
@@ -63,10 +67,29 @@ public class RadnikPristupPodacima implements RadnikDao{
             UUID radnikId = UUID.fromString(radnikIdStr);
 
             String ime = resultSet.getString("ime");
+            String slika = resultSet.getString("slika");
             return new Radnik(
                     radnikId,
-                    ime
+                    ime,
+                    slika
             );
         };
+    }
+
+    @Override
+    public Radnik getRadnik(UUID id) {
+        String sql = "" +
+                "SELECT " +
+                " id, " +
+                " ime, " +
+                " slika " +
+                "FROM radnik WHERE id = ?";
+        return jdbcTemplate.queryForObject(sql, new Object[]{id}, (rs, rowNum) ->
+                new Radnik(
+                        UUID.fromString(rs.getString("id")),
+                        rs.getString("ime"),
+                        rs.getString("slika")
+                ));
+
     }
 }
